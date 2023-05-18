@@ -480,10 +480,10 @@ class SentinelsatAPI(Api, QueryStringSearch, Download):
         if "start" in qp:
             if "end" not in qp:
                 raise ValueError("Missing ending day")
-            qp["date"] = (
-                isoparse(qp.pop("start")),
-                isoparse(qp.pop("end")),
-            )
+            qp["date"] = [
+                dt if isinstance(dt, datetime) else isoparse(dt)
+                for dt in [qp.pop("start"), qp.pop("end")]
+            ]
 
         # Footprint
         if "area" in qp and isinstance(qp["area"], list):
